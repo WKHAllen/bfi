@@ -1,11 +1,13 @@
 {
-  "name": "Start on Heroku: Go",
-  "description": "Go Getting Started Example App",
+  "name": "Brainfuck Interpreter",
+  "description": "An interpreter for the Brainfuck language, written for the web using Go",
   "keywords": [
-    "getting-started",
-    "go",
-    "sample",
-    "example"
+    "brainfuck",
+    "brainfuck-interpreter",
+    "golang",
+    "javascript",
+    "gin-gonic",
+    "ajax"
   ],
   "website": "http://github.com/WKHAllen/bfi",
   "repository": "http://github.com/WKHAllen/bfi"
