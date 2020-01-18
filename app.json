@@ -9,6 +9,6 @@
     "gin-gonic",
     "ajax"
   ],
-  "website": "http://github.com/WKHAllen/bfi",
+  "website": "https://bf-i.herokuapp.com/",
   "repository": "http://github.com/WKHAllen/bfi"
 }
