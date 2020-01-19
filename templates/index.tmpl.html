@@ -1,7 +1,25 @@
 <!DOCTYPE html>
 <html>
-    {{template "header.tmpl.html"}}
+    {{template "head.tmpl.html"}}
     <body>
-        <h1 class="centered">Brainfuck Interpreter</h1>
+        <header>
+            <h1 class="centered">Brainfuck Interpreter</h1>
+        </header>
+        <main>
+            <p class="justified">Welcome to the Brainfuck Interpreter. You may write your brainfuck code in the box below. The code is saved automatically, so it's safe to close this page. Once you are ready to run your code, click the button below the box. Input can be provided in the box below the button, and output will appear in the box below that.</p>
+            <textarea id="code" class="form-control mb-3" rows="16" maxlength="65536" onchange="saveCode();"></textarea>
+            <button type="button" class="btn btn-primary mb-3" onclick="runCode();">Run</button>
+            <div class="form-group mb-3">
+                <label for="code-input">Input</label>
+                <input id="code-input" type="text" class="form-control" maxlength="1024">
+            </div>
+            <div class="form-group mb-3">
+                <label for="code-output">Output</label>
+                <textarea id="code-output" class="form-control" rows="8" disabled></textarea>
+            </div>
+        </main>
+        <footer>
+            &copy;2020 Will Allen
+        </footer>
     </body>
 </html>
