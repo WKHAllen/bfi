@@ -40,4 +40,5 @@ func (bfi *BFInterpreter) Interpret() (int, error) {
 	// return BFIOutput when '.'
 	// return an error if ']' is found and whileStack is empty
 	// return an error if tape head is moved left of zero
+	return 0, fmt.Errorf("error")
 }

@@ -16,20 +16,20 @@ func index(c *gin.Context) {
 }
 
 func interpret(c *gin.Context) {
-	sessionID := c.Query("sessionID")
-	bfcode := c.Query("code")
+	// sessionID := c.Query("sessionID")
+	// bfcode := c.Query("code")
 	// TODO: interpret the brainfuck code
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 func returnOutput(c *gin.Context) {
-	sessionID := c.Query("sessionID")
+	// sessionID := c.Query("sessionID")
 	// TODO: continue interpreting
 }
 
 func returnInput(c *gin.Context) {
-	sessionID := c.Query("sessionID")
-	value := c.Query("value")
+	// sessionID := c.Query("sessionID")
+	// value := c.Query("value")
 	// TODO: pass the input value to the interpreter
 }
 
