@@ -18,6 +18,11 @@ func NewBFTape() *BFTape {
 	return bft
 }
 
+// Get : Get the value at the tape head
+func (bft *BFTape) Get() int8 {
+	return bft.tape[bft.head]
+}
+
 // Inc : Increment the value at the tape head
 func (bft *BFTape) Inc() {
 	bft.tape[bft.head]++

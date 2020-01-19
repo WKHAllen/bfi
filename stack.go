@@ -27,3 +27,11 @@ func (s *Stack) Pop() (int, error) {
     *s = (*s)[:len(*s) - 1]
     return res, nil
 }
+
+// Peek : Peek the value at the top of the stack
+func (s *Stack) Peek() (int, error) {
+	if len(*s) == 0 {
+		return 0, fmt.Errorf("stack is empty")
+	}
+	return (*s)[len(*s) - 1], nil
+}

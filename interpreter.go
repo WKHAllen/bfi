@@ -31,14 +31,61 @@ func NewBFInterpreter(code string) *BFInterpreter {
 }
 
 // Interpret : Interpret brainfuck code
-func (bfi *BFInterpreter) Interpret() (int, error) {
-	// TODO: interpret the brainfuck code
-	// when '[': add the current index to the whileStack
-	// when ']': pop from the whileStack and return to that position
-	// return BFIDone when done
-	// return BFIInput when user input is required (',')
-	// return BFIOutput when '.'
-	// return an error if ']' is found and whileStack is empty
-	// return an error if tape head is moved left of zero
-	return 0, fmt.Errorf("error")
+func (bfi *BFInterpreter) Interpret() (int, byte, error) {
+	for ; bfi.index < len(bfi.code); bfi.index++ {
+		switch (bfi.code[bfi.index]) {
+			case '<':
+				err := bfi.tape.MoveLeft()
+				if err != nil {
+					return -1, ' ', err
+				}
+			case '>':
+				bfi.tape.MoveRight()
+			case '-':
+				bfi.tape.Dec()
+			case '+':
+				bfi.tape.Inc()
+			case '[':
+				if bfi.tape.Get() == 0 {
+					err := bfi.JumpForward()
+					if err != nil {
+						return -1, ' ', err
+					}
+				} else {
+					bfi.whileStack.Push(bfi.index)
+				}
+			case ']':
+				index, err := bfi.whileStack.Peek()
+				if err != nil {
+					return -1, ' ', err
+				}
+				if bfi.tape.Get() == 0 {
+					bfi.whileStack.Pop()
+				} else {
+					bfi.index = index
+				}
+			case '.':
+				return BFIOutput, byte(bfi.tape.Get()), nil
+			case ',':
+				return BFIInput, ' ', nil
+		}
+	}
+	return BFIDone, ' ', nil
+}
+
+// JumpForward : Jump to the corresponding ']'
+func (bfi *BFInterpreter) JumpForward() error {
+	bfi.index++
+	for level := 1; level > 0; bfi.index++ {
+		if bfi.index >= len(bfi.code) {
+			return fmt.Errorf("no corresponding ']' found")
+		}
+		switch (bfi.code[bfi.index]) {
+			case '[':
+				level++
+			case ']':
+				level--
+		}
+	}
+	return nil
 }
