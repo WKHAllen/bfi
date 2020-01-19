@@ -7,7 +7,7 @@
         </header>
         <main>
             <p class="justified">Welcome to the Brainfuck Interpreter. You may write your brainfuck code in the box below. The code is saved automatically, so it's safe to close this page. Once you are ready to run your code, click the button below the box. Input can be provided in the box below the button, and output will appear in the box below that.</p>
-            <textarea id="code" class="form-control mb-3" rows="16" maxlength="65536" onchange="saveCode();"></textarea>
+            <textarea id="code" class="form-control mb-3" rows="16" maxlength="65536" onkeyup="saveCode();"></textarea>
             <button type="button" class="btn btn-primary mb-3" onclick="runCode();">Run</button>
             <div class="form-group mb-3">
                 <label for="code-input">Input</label>
