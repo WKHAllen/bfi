@@ -25,7 +25,7 @@ main {
     text-align: justify;
 }
 
-#code {
+#code, #code-input, #code-output {
     font-family: 'Consolas', sans-serif;
 }
 

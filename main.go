@@ -47,7 +47,7 @@ func interpret(c *gin.Context) {
 	sessionID, err := strconv.Atoi(c.Query("sessionID"))
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"error": "invalid sessionID",
+			"error": "invalid session ID",
 		})
 	} else {
 		code := c.Query("code")
@@ -78,15 +78,43 @@ func interpret(c *gin.Context) {
 	}
 }
 
-func returnOutput(c *gin.Context) {
-	// sessionID := c.Query("sessionID")
-	// TODO: continue interpreting
-}
-
 func returnInput(c *gin.Context) {
 	// sessionID := c.Query("sessionID")
 	// value := c.Query("value")
 	// TODO: pass the input value to the interpreter
+}
+
+func returnOutput(c *gin.Context) {
+	sessionID, err := strconv.Atoi(c.Query("sessionID"))
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"error": "invalid session ID",
+		})
+	} else {
+		bfi := sessions[sessionID]
+
+		success, returnCode, displayByte, err := doInterpret(bfi)
+
+		if !success {
+			delete(sessions, sessionID)
+			c.JSON(http.StatusOK, gin.H{
+				"error": "timed out",
+			})
+		} else {
+			if err != nil {
+				delete(sessions, sessionID)
+				c.JSON(http.StatusOK, gin.H{
+					"error": err.Error(),
+					"index": bfi.index,
+				})
+			} else {
+				c.JSON(http.StatusOK, gin.H{
+					"returnCode": returnCode,
+					"displayByte": displayByte,
+				})
+			}
+		}
+	}
 }
 
 func main() {
@@ -108,6 +136,7 @@ func main() {
 	router.GET("/", index)
 	router.GET("/interpret", interpret)
 	router.GET("/returnInput", returnInput)
+	router.GET("/returnOutput", returnOutput)
 
 	router.Run(":" + port)
 }
