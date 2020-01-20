@@ -11,6 +11,7 @@ import (
 	_ "github.com/heroku/x/hmetrics/onload"
 )
 
+const interpretTimeout = 10 * time.Second
 var sessions map[int]*BFInterpreter
 
 func index(c *gin.Context) {
@@ -23,6 +24,25 @@ func index(c *gin.Context) {
 	})
 }
 
+func doInterpret(bfi *BFInterpreter) (bool, int, byte, error) {
+	var returnCode int
+	var displayByte byte
+	var err error
+
+	done := make(chan int)
+	go func() {
+		returnCode, displayByte, err = bfi.Interpret()
+		done <- 0
+	}()
+
+	select {
+		case <-done:
+			return true, returnCode, displayByte, err
+		case <-time.After(interpretTimeout):
+			return false, returnCode, displayByte, err
+	}
+}
+
 func interpret(c *gin.Context) {
 	sessionID, err := strconv.Atoi(c.Query("sessionID"))
 	if err != nil {
@@ -33,17 +53,27 @@ func interpret(c *gin.Context) {
 		code := c.Query("code")
 		bfi := NewBFInterpreter(code)
 		sessions[sessionID] = bfi
-		returnCode, displayByte, err := bfi.Interpret()
-		if err != nil {
+
+		success, returnCode, displayByte, err := doInterpret(bfi)
+
+		if !success {
+			delete(sessions, sessionID)
 			c.JSON(http.StatusOK, gin.H{
-				"error": err.Error(),
-				"index": bfi.index,
+				"error": "timed out",
 			})
 		} else {
-			c.JSON(http.StatusOK, gin.H{
-				"returnCode": returnCode,
-				"displayByte": displayByte,
-			})
+			if err != nil {
+				delete(sessions, sessionID)
+				c.JSON(http.StatusOK, gin.H{
+					"error": err.Error(),
+					"index": bfi.index,
+				})
+			} else {
+				c.JSON(http.StatusOK, gin.H{
+					"returnCode": returnCode,
+					"displayByte": displayByte,
+				})
+			}
 		}
 	}
 }

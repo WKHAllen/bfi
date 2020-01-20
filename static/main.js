@@ -66,8 +66,12 @@ function runCode() {
         dataType: 'json',
         success: (data) => {
             if (data.error) {
-                setStatus(`Error: ${data.error}, Index: ${data.index}`);
-                highlightCode(data.index, data.index);
+                if (data.index !== undefined) {
+                    setStatus(`Error: ${data.error}, Index: ${data.index}`);
+                    highlightCode(data.index, data.index);
+                } else {
+                    setStatus(`Error: ${data.error}`);
+                }
                 enableElement('#run-button');
             } else {
                 // TODO: check which code was returned
