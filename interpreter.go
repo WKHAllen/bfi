@@ -6,9 +6,9 @@ import (
 
 // Interpreter return codes
 const (
-	BFIDone = iota
-	BFIInput = iota
-	BFIOutput = iota
+	BFIDone = 0
+	BFIInput = 1
+	BFIOutput = 2
 )
 
 // BFInterpreter : Brainfuck interpreter object
@@ -57,7 +57,7 @@ func (bfi *BFInterpreter) Interpret() (int, byte, error) {
 			case ']':
 				index, err := bfi.whileStack.Peek()
 				if err != nil {
-					return -1, ' ', err
+					return -1, ' ', fmt.Errorf("no corresponding '[' found")
 				}
 				if bfi.tape.Get() == 0 {
 					bfi.whileStack.Pop()

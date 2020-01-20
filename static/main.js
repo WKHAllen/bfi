@@ -1,6 +1,10 @@
 const codeKey = 'code';
 
-// On document ready
+const BFIDone = 0
+const BFIInput = 1
+const BFIOutput = 2
+
+// On document ready populate the code textarea
 $(() => {
     var code = localStorage.getItem(codeKey);
     if (code !== null) {
@@ -14,7 +18,31 @@ function saveCode() {
     localStorage.setItem(codeKey, code);
 }
 
+function getSessionID() {
+    return $('#sessionID').text();
+}
+
+function displayOutput(char) {
+    $('#code-output').append(char);
+}
+
 // Run the code
 function runCode() {
-    // TODO: send code to server via AJAX
+    $.ajax({
+        url: '/interpret',
+        type: 'GET',
+        data: {
+            sessionID: getSessionID(),
+            code: $('#code').val()
+        },
+        dataType: 'json',
+        success: (data) => {
+            console.log(data);
+            // TODO: check `data` to see why it returned
+            displayOutput(data);
+        },
+        error: (err) => {
+            // TODO: display the error
+        }
+    });
 }

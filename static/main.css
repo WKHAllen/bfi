@@ -28,3 +28,7 @@ main {
 #code {
     font-family: 'Consolas', sans-serif;
 }
+
+.hidden {
+    display: none;
+}
