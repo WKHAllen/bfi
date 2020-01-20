@@ -49,5 +49,6 @@ func (bft *BFTape) MoveRight() {
 	bft.head++
 	if bft.head == bft.size {
 		bft.tape = append(bft.tape, 0)
+		bft.size++
 	}
 }

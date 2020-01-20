@@ -65,8 +65,10 @@ func (bfi *BFInterpreter) Interpret() (int, byte, error) {
 					bfi.index = index
 				}
 			case '.':
+				bfi.index++
 				return BFIOutput, byte(bfi.tape.Get()), nil
 			case ',':
+				bfi.index++
 				return BFIInput, ' ', nil
 		}
 	}
