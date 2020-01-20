@@ -15,6 +15,8 @@ type BFTape struct {
 func NewBFTape() *BFTape {
 	bft := &BFTape{size: 1}
 	bft.tape = append(bft.tape, 0)
+	bft.head = 0
+	bft.size = 1
 	return bft
 }
 
@@ -44,8 +46,8 @@ func (bft *BFTape) MoveLeft() error {
 
 // MoveRight : Move the tape head to the right
 func (bft *BFTape) MoveRight() {
+	bft.head++
 	if bft.head == bft.size {
 		bft.tape = append(bft.tape, 0)
 	}
-	bft.head++
 }
