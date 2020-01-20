@@ -36,7 +36,8 @@ func interpret(c *gin.Context) {
 		returnCode, displayByte, err := bfi.Interpret()
 		if err != nil {
 			c.JSON(http.StatusOK, gin.H{
-				"error": err,
+				"error": err.Error(),
+				"index": bfi.index,
 			})
 		} else {
 			c.JSON(http.StatusOK, gin.H{
