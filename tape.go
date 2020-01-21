@@ -6,7 +6,7 @@ import (
 
 // BFTape : Brainfuck tape object
 type BFTape struct {
-	tape []int8
+	tape []byte
 	head int
 	size int
 }
@@ -21,7 +21,7 @@ func NewBFTape() *BFTape {
 }
 
 // Get : Get the value at the tape head
-func (bft *BFTape) Get() int8 {
+func (bft *BFTape) Get() byte {
 	return bft.tape[bft.head]
 }
 
