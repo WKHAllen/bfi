@@ -97,7 +97,12 @@ function mainReturn(data) {
         }
         if (data.returnCode == BFIInput) {
             // Wait for input
-            // TODO: wait for input
+            var codeInput = $('#code-input');
+            if (codeInput.val() == '') {
+                codeInput.keyup(returnInput);
+            } else {
+                returnInput();
+            }
         } else if (data.returnCode == BFIOutput) {
             // Display the character and continue
             displayOutput(data.displayByte);
@@ -113,4 +118,23 @@ function mainReturn(data) {
             });
         }
     }
+}
+
+// Handle input when it has been provided
+function returnInput() {
+    var codeInput = $('#code-input');
+    codeInput.off('keyup');
+    var value = codeInput.val()[0];
+    codeInput.val(codeInput.val().slice(1));
+    $.ajax({
+        url: '/returnInput',
+        type: 'GET',
+        data: {
+            sessionID: getSessionID(),
+            value: value
+        },
+        dataType: 'json',
+        success: mainReturn,
+        error: showError
+    });
 }

@@ -79,9 +79,38 @@ func interpret(c *gin.Context) {
 }
 
 func returnInput(c *gin.Context) {
-	// sessionID := c.Query("sessionID")
-	// value := c.Query("value")
-	// TODO: pass the input value to the interpreter
+	sessionID, err := strconv.Atoi(c.Query("sessionID"))
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"error": "invalid session ID",
+		})
+	} else {
+		value := c.Query("value")[0]
+		bfi := sessions[sessionID]
+		bfi.tape.Set(value)
+
+		success, returnCode, displayByte, err := doInterpret(bfi)
+
+		if !success {
+			delete(sessions, sessionID)
+			c.JSON(http.StatusOK, gin.H{
+				"error": "timed out",
+			})
+		} else {
+			if err != nil {
+				delete(sessions, sessionID)
+				c.JSON(http.StatusOK, gin.H{
+					"error": err.Error(),
+					"index": bfi.index,
+				})
+			} else {
+				c.JSON(http.StatusOK, gin.H{
+					"returnCode": returnCode,
+					"displayByte": displayByte,
+				})
+			}
+		}
+	}
 }
 
 func returnOutput(c *gin.Context) {

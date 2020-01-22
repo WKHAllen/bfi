@@ -25,6 +25,11 @@ func (bft *BFTape) Get() byte {
 	return bft.tape[bft.head]
 }
 
+// Set : Set the value at the tape head
+func (bft *BFTape) Set(value byte) {
+	bft.tape[bft.head] = value
+}
+
 // Inc : Increment the value at the tape head
 func (bft *BFTape) Inc() {
 	bft.tape[bft.head]++
